@@ -1,1 +1,1 @@
-The Hall Allocation and Event Management System.
+The Hall Allocation and Event Management System for the University
