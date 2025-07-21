@@ -1,0 +1,206 @@
+/* Full-screen background setup */
+.home-container {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+/* Dark overlay for better text readability */
+.overlay {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  z-index: 1;
+}
+/* Title box */
+.welcome-text {
+  background-color: rgba(0, 26, 51, 0.85);
+  padding: 1.2rem 2.5rem;
+  border-radius: 12px;
+  font-size: 2.8rem;
+  font-weight: 700;
+  max-width: fit-content;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s ease forwards;
+}
+/* Subtitle box */
+.subtitle {
+  background-color: rgba(255, 255, 255, 0.28);
+  color: #000;
+  padding: 1.2rem 2.5rem;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s ease 0.2s forwards;
+}
+.description {
+  background-color: rgba(255, 255, 255, 0.45);
+  color: #000;
+  padding: 1.2rem 2.5rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  line-height: 1.6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s ease 0.4s forwards;
+}
+/* Buttons container */
+.buttons {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  transform: translateY(-20px);
+  opacity: 0;
+  animation: fadeInDown 0.8s ease 0.6s forwards;
+}
+/* Styled buttons */
+.btn {
+  width: 220px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.btn-timetable {
+  background-color: #0e4a64;
+}
+.btn-login {
+  background-color: #0a6e75;
+}
+.btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+.btn-timetable:hover {
+  background-color: #156485;
+}
+.btn-login:hover {
+  background-color: #088a93;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+/* Notices panel */
+.notices-box {
+  position: absolute;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%) translateX(20px);
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(5px);
+  color: #000;
+  padding: 2rem;
+  border-radius: 14px;
+  width: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  text-align: center;
+  animation: fadeInRight 0.8s ease 0.8s forwards;
+  opacity: 0;
+  z-index: 2;
+}
+.notices-box h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #0e4a64;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.notice-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .overlay {
+    width: 60%;
+  }
+}
+@media (max-width: 992px) {
+  .overlay {
+    width: 70%;
+    padding: 2rem;
+  }
+  .notices-box {
+    right: 2rem;
+    width: 280px;
+  }
+}
+@media (max-width: 768px) {
+  .home-container {
+    justify-content: center;
+    padding: 1rem;
+  }
+  .overlay {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .welcome-text, .subtitle, .description {
+    text-align: center;
+  }
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .notices-box {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin-top: 2rem;
+    width: 90%;
+    max-width: 400px;
+    animation: fadeInDown 0.8s ease 0.8s forwards;
+  }
+}

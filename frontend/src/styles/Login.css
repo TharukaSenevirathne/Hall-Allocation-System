@@ -1,0 +1,147 @@
+/* Full-screen login container */
+.login-login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+background: linear-gradient(to bottom right, #a2d9f590, #6fbf7397);
+  padding: 1rem;
+}
+
+/* Login form wrapper */
+.login-login-form {
+  background-color: rgba(0, 26, 51, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 28rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Title */
+.login-form-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Form group with floating label */
+.login-form-group {
+  position: relative;
+}
+
+.login-form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #0a2540;
+  border: 1px solid #1e3a5f;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.login-form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #00cc88;
+}
+
+.login-form-group input::placeholder {
+  color: transparent;
+}
+
+.login-form-group label {
+  position: absolute;
+  left: 1rem;
+
+  top: -0.625rem;
+  font-size: 0.875rem;
+  color: #a0aec0;
+  background-color: #0a2540;
+  padding: 0 rem;
+  transition: all 0.3s ease;
+}
+
+.login-form-group input:placeholder-shown + label {
+  font-size: 1rem;
+  top: 0.875rem;
+}
+
+.login-form-group input:focus + label {
+  top: -0.625rem;
+  font-size: 0.875rem;
+  color: #00cc88;
+}
+
+/* Forgot Password */
+.login-forgot-password {
+  text-align: right;
+  font-size: 0.875rem;
+  color: #cbd5e0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.login-forgot-password:hover {
+  color: #00cc88;
+}
+
+/* Login button */
+.login-login-form button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #00cc88;
+  color: white;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.login-login-form button:hover {
+  background-color: #00b376;
+  transform: scale(1.02);
+}
+
+.login-login-form button:active {
+  transform: scale(0.98);
+}
+
+.login-login-form button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #00cc88, 0 0 0 4px rgba(0, 204, 136, 0.5);
+}
+
+.login-login-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-message {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-message.success {
+  background-color: rgba(22, 101, 52, 0.2);
+  color: #38a169;
+  border: 1px solid #38a169;
+}
+
+.login-message.error {
+  background-color: rgba(153, 27, 27, 0.2);
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+}
