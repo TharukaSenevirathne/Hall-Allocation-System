@@ -72,7 +72,7 @@
 /* Module Cells */
 .module-cell {
   padding: 8px;
-  border-bottom: 1px solid #edf2f7;
+  border: 1px solid #e4ebf3;
   height: 60px;
   transition: all 0.2s ease;
 }
@@ -105,7 +105,7 @@
 /* Hour Divider Row */
 .hour-row .time-cell,
 .hour-row td {
-  border-top: 2px solid #e2e8f0;
+  border-top: 2px solid #25518a;
 }
 
 /* Responsive Design */

@@ -164,9 +164,7 @@ export default function AdminDashboard() {
             <div className="admin-dashboard-content">
               <div className="admin-content-placeholder">
                 <div className="admin-placeholder-content">
-                  <Users2Icon className="admin-placeholder-icon" />
-                  <p className="admin-placeholder-text">Dashboard content will appear here</p>
-                  <p className="admin-placeholder-subtext">Select an action from the buttons above</p>
+
                 </div>
               </div>
             </div>

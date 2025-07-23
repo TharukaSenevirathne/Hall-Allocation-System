@@ -5,7 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-background: linear-gradient(to bottom right, #a2d9f590, #6fbf7397);
+  background-image: url('../assets/login-bg.png');
+  background-position: center;
+  background: linear-gradient(to bottom right, #a2d9f57d, #6fbf7385);
   padding: 1rem;
 }
 

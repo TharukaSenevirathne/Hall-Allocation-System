@@ -17,7 +17,7 @@ const UpdateStaffForm = () => {
   };
 
   const handleSelect = async (staff) => {
-    setSelectedStaffId(staff.staff_id); // ✅ FIXED: use staff_id
+    setSelectedStaffId(staff.staff_id);
     setFormData({
       name: staff.name,
       regNumber: staff.reg_number,
@@ -26,7 +26,7 @@ const UpdateStaffForm = () => {
       department: staff.department,
       staffType: staff.staff_type,
       teachingModules: staff.teaching_modules || "",
-      password: "" // For security, not fetched. Admin can reset it if needed.
+      password: ""
     });
     setSearchResults([]);
     setSearchQuery("");
@@ -34,7 +34,6 @@ const UpdateStaffForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "teachingModules") {
       const raw = value.toUpperCase().replace(/,/g, "");
       let result = "";
@@ -72,26 +71,28 @@ const UpdateStaffForm = () => {
   };
 
   return (
-    <div className="admin-form-card">
-      <h2 className="admin-form-title">Update Staff Member</h2>
+    <div className="fm-form-card">
+      <div className="fm-form-header">
+        <h2 className="fm-form-title">Update Staff Member</h2>
+        <div className="fm-form-icon">👨‍🏫</div>
+      </div>
 
-      {/* Search */}
-      <div className="admin-form-group">
+      <div className="fm-form-group fm-search-group">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          className="fm-form-input"
           placeholder="Search by Name or Reg No"
-          className="admin-form-input"
         />
-        <button type="button" className="admin-confirm-button" onClick={handleSearch}>
-          Search
+        <button type="button" className="fm-form-button fm-search-button" onClick={handleSearch}>
+          <span>Search</span>
+          <div className="fm-button-effect"></div>
         </button>
       </div>
 
-      {/* Display Search Results */}
       {searchResults.length > 0 && (
-        <ul className="search-dropdown">
+        <ul className="fm-search-dropdown">
           {searchResults.map((staff) => (
             <li key={staff.staff_id} onClick={() => handleSelect(staff)}>
               {staff.name} ({staff.reg_number})
@@ -100,63 +101,35 @@ const UpdateStaffForm = () => {
         </ul>
       )}
 
-      {/* Update Form */}
       {formData && (
         <form onSubmit={handleUpdate}>
-          <div className="admin-form-group">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Name"
-              className="admin-form-input"
-              required
-            />
-          </div>
+          {[
+            ["name", "Name"],
+            ["regNumber", "Reg. Number"],
+            ["email", "Email"],
+            ["contactNumber", "Contact Number"]
+          ].map(([name, label]) => (
+            <div className="fm-form-group" key={name}>
+              <input
+                type={name === "email" ? "email" : "text"}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                className="fm-form-input"
+                placeholder=" "
+                required
+              />
+              <label className="fm-form-label">{label}</label>
+              <div className="fm-form-line"></div>
+            </div>
+          ))}
 
-          <div className="admin-form-group">
-            <input
-              type="text"
-              name="regNumber"
-              value={formData.regNumber}
-              onChange={handleChange}
-              placeholder="Reg. Number"
-              className="admin-form-input"
-              required
-            />
-          </div>
-
-          <div className="admin-form-group">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="admin-form-input"
-              required
-            />
-          </div>
-
-          <div className="admin-form-group">
-            <input
-              type="text"
-              name="contactNumber"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              placeholder="Contact Number"
-              className="admin-form-input"
-              required
-            />
-          </div>
-
-          <div className="admin-form-group">
+          <div className="fm-form-group">
             <select
               name="department"
               value={formData.department}
               onChange={handleChange}
-              className="admin-form-input"
+              className="fm-form-select"
               required
             >
               <option value="IS">IS</option>
@@ -166,48 +139,55 @@ const UpdateStaffForm = () => {
               <option value="MME">MME</option>
               <option value="MENA">MENA</option>
             </select>
+            <div className="fm-select-arrow">▼</div>
           </div>
 
-          <div className="admin-form-group">
+          <div className="fm-form-group">
             <select
               name="staffType"
               value={formData.staffType}
               onChange={handleChange}
-              className="admin-form-input"
+              className="fm-form-select"
               required
             >
               <option value="Academic">Academic</option>
               <option value="Non-Academic">Non-Academic</option>
             </select>
+            <div className="fm-select-arrow">▼</div>
           </div>
 
           {formData.staffType === "Academic" && (
-            <div className="admin-form-group">
+            <div className="fm-form-group">
               <input
                 type="text"
                 name="teachingModules"
                 value={formData.teachingModules}
                 onChange={handleChange}
-                placeholder="Teaching Modules (e.g., EE2344,IS2455)"
-                className="admin-form-input"
+                className="fm-form-input"
+                placeholder=" "
               />
+              <label className="fm-form-label">Teaching Modules (e.g., EE2344,IS2455)</label>
+              <div className="fm-form-line"></div>
             </div>
           )}
 
-          <div className="admin-form-group">
+          <div className="fm-form-group">
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Reset Password (optional)"
-              className="admin-form-input"
+              className="fm-form-input"
+              placeholder=" "
             />
+            <label className="fm-form-label">Reset Password (optional)</label>
+            <div className="fm-form-line"></div>
           </div>
 
-          <div className="admin-form-button-container">
-            <button type="submit" className="admin-confirm-button">
-              Update Staff
+          <div className="fm-form-button-container">
+            <button type="submit" className="fm-form-button">
+              <span>Update Staff</span>
+              <div className="fm-button-effect"></div>
             </button>
           </div>
         </form>

@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
-import Signup from './pages/Signup'; // Uncomment if you want to use Signup page
 import Home from "./pages/Home";
 import AdminDashboard from './pages/AdminDashboard'; // Uncomment if you want to use AdminDashboard
 import StaffList from "./pages/StaffList";
@@ -17,7 +16,6 @@ function App() {
 
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/staff-list" element={<StaffList />} />
