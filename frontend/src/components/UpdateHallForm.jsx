@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const UpdateHallForm = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [formData, setFormData] = useState(null);
   const [selectedHallId, setSelectedHallId] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // success or error
+
+  useEffect(() => {
+    if (message) {
+      const timeout = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [message]);
 
   const handleSearch = async () => {
     try {
@@ -13,6 +25,8 @@ const UpdateHallForm = () => {
       setSearchResults(data);
     } catch (err) {
       console.error("Search error:", err);
+      setMessage("❌ Search failed");
+      setMessageType("error");
     }
   };
 
@@ -50,17 +64,21 @@ const UpdateHallForm = () => {
           assigned_tech_officer: formData.nonAcademicMember
         })
       });
+
       const data = await res.json();
       if (res.ok) {
-        alert("Hall updated successfully!");
+        setMessage("✅ Hall updated successfully!");
+        setMessageType("success");
         setFormData(null);
         setSelectedHallId(null);
       } else {
-        alert("Error: " + (data.message || "Failed to update hall"));
+        setMessage("❌ Error: " + (data.message || "Failed to update hall"));
+        setMessageType("error");
       }
     } catch (err) {
       console.error("Update error:", err);
-      alert("Something went wrong!");
+      setMessage("❌ Something went wrong!");
+      setMessageType("error");
     }
   };
 
@@ -70,6 +88,12 @@ const UpdateHallForm = () => {
         <h2 className="fm-form-title">Update Hall</h2>
         <div className="fm-form-icon">🏢</div>
       </div>
+
+      {message && (
+        <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+          {message}
+        </div>
+      )}
 
       <div className="fm-form-group fm-search-group">
         <input

@@ -115,6 +115,26 @@ router.get("/halls/:id", async (req, res) => {
   }
 });
 
+// ✅ Delete a Hall by ID
+router.delete("/halls/:id", async (req, res) => {
+  const db = req.db;
+  const id = req.params.id;
+
+  try {
+    const [result] = await db.query("DELETE FROM Halls WHERE hall_id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Hall not found" });
+    }
+
+    res.status(200).json({ message: "Hall deleted successfully" });
+  } catch (err) {
+    console.error("❌ Delete error:", err);
+    res.status(500).json({ message: "Failed to delete hall" });
+  }
+});
+
+
 
 
 

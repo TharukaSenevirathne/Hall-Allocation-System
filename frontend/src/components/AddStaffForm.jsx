@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AddStaffForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,19 @@ const AddStaffForm = () => {
     teachingModules: "",
     password: ""
   });
+
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +50,8 @@ const AddStaffForm = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        alert("Staff added successfully!");
+        setMessage("✅ Staff added successfully!");
+        setMessageType("success");
         setFormData({
           name: "",
           regNumber: "",
@@ -49,11 +63,13 @@ const AddStaffForm = () => {
           password: ""
         });
       } else {
-        alert("Error: " + (data.error || "Failed to add staff"));
+        setMessage("❌ Error: " + (data.error || "Failed to add staff"));
+        setMessageType("error");
       }
     } catch (err) {
       console.error("Error adding staff:", err);
-      alert("Something went wrong!");
+      setMessage("❌ Something went wrong!");
+      setMessageType("error");
     }
   };
 
@@ -63,6 +79,13 @@ const AddStaffForm = () => {
         <h2 className="fm-form-title">Add New Member</h2>
         <div className="fm-form-icon">👨‍🏫</div>
       </div>
+
+      {message && (
+        <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+          {message}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div className="fm-form-group">
           <input type="text" name="name" value={formData.name} onChange={handleChange} className="fm-form-input" placeholder=" " required />

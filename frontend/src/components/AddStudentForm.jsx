@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AddStudentForm = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +15,22 @@ const AddStudentForm = () => {
   });
 
   const [regPrefix, setRegPrefix] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "batch") {
       const year = 1998 + parseInt(value);
       setRegPrefix(`EG/${year}/`);
@@ -41,8 +54,10 @@ const AddStudentForm = () => {
           user_type: "Student"
         })
       });
+
       if (response.ok) {
-        alert("Student added successfully");
+        setMessage("✅ Student added successfully");
+        setMessageType("success");
         setFormData({
           name: "",
           reg_no: "",
@@ -58,11 +73,13 @@ const AddStudentForm = () => {
         setRegPrefix("");
       } else {
         const data = await response.json();
-        alert("Failed to add student: " + (data.error || "Unknown error"));
+        setMessage("❌ Failed to add student: " + (data.error || "Unknown error"));
+        setMessageType("error");
       }
     } catch (err) {
       console.error("❌ Failed to add student:", err);
-      alert("Failed to add student");
+      setMessage("❌ Failed to add student");
+      setMessageType("error");
     }
   };
 
@@ -72,6 +89,13 @@ const AddStudentForm = () => {
         <h2 className="fm-form-title">Add New Student</h2>
         <div className="fm-form-icon">👨‍🎓</div>
       </div>
+
+      {message && (
+        <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+          {message}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div className="fm-form-group">
           <input type="text" name="name" value={formData.name} onChange={handleChange} className="fm-form-input" placeholder=" " required />

@@ -3,27 +3,36 @@ import { DateNavigation } from './DateNavigation';
 import { TimeTableContent } from './TimeTableContent';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import loadingLogo from '../assets/logo.png'; // your logo path here
 import './TimeTable.css';
-
-
 
 export const TimeTable = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [halls, setHalls] = useState([]);
   const [moduleData, setModuleData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
   const navigate = useNavigate();
 
   // Fetch halls
   useEffect(() => {
-    axios.get("http://localhost:5000/api/halls")
-      .then(res => {
+    const fetchHalls = async () => {
+      const start = Date.now();
+      try {
+        const res = await axios.get("http://localhost:5000/api/halls");
         const hallNames = res.data.map(h => h.name.trim());
         console.log("✅ Fetched halls from backend:", hallNames);
         setHalls(hallNames);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("❌ Failed to fetch halls:", err);
-      });
+      } finally {
+        const elapsed = Date.now() - start;
+        const remaining = 1000 - elapsed;
+        setTimeout(() => setLoading(false), remaining > 0 ? remaining : 0);
+      }
+    };
+
+    fetchHalls();
   }, []);
 
   // Fetch timetable for selected date
@@ -71,13 +80,21 @@ export const TimeTable = () => {
     fetchTimetable();
   }, [currentDate]);
 
-  // Prevent scroll
+  // Fade out loader after loading finishes with 0.5s delay
   useEffect(() => {
-    document.body.classList.add('no-scroll-page');
-    return () => {
+    if (!loading) {
+      setTimeout(() => setShowLoader(false), 500);
+    }
+  }, [loading]);
+
+  // Prevent scroll while loading
+  useEffect(() => {
+    if (showLoader) {
+      document.body.classList.add('no-scroll-page');
+    } else {
       document.body.classList.remove('no-scroll-page');
-    };
-  }, []);
+    }
+  }, [showLoader]);
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -102,27 +119,42 @@ export const TimeTable = () => {
   const timeSlots = generateTimeSlots();
 
   return (
-    <div className="timetable-container">
-      <div className="timetable-header">
-        <h1 className="timetable-title">Timetable</h1>
-        <button className="home-button" onClick={() => navigate(-1)}>Back</button>
+    <>
+      {/* Loading overlay */}
+      {showLoader && (
+        <div className={`loading-overlay ${!loading ? 'fade-out' : ''}`}>
+          <img src={loadingLogo} alt="Loading" className="loading-logo" />
+          <p>Loading...</p>
+        </div>
+      )}
 
+      <div
+        className="timetable-container"
+        style={{
+          pointerEvents: showLoader ? 'none' : 'auto',
+          userSelect: showLoader ? 'none' : 'auto',
+        }}
+      >
+        <div className="timetable-header">
+          <h1 className="timetable-title">Timetable</h1>
+          <button className="home-button" onClick={() => navigate(-1)}>Back</button>
+        </div>
+        <DateNavigation
+          currentDate={currentDate}
+          onDateChange={setCurrentDate}
+        />
+        <div className="timetable-wrapper">
+          {halls.length === 0 ? (
+            <p>Loading halls...</p>
+          ) : (
+            <TimeTableContent
+              timeSlots={timeSlots}
+              halls={halls}
+              moduleData={moduleData}
+            />
+          )}
+        </div>
       </div>
-      <DateNavigation 
-        currentDate={currentDate} 
-        onDateChange={setCurrentDate} 
-      />
-      <div className="timetable-wrapper">
-        {halls.length === 0 ? (
-          <p>Loading halls...</p>
-        ) : (
-          <TimeTableContent 
-            timeSlots={timeSlots} 
-            halls={halls} 
-            moduleData={moduleData}
-          />
-        )}
-      </div>
-    </div>
+    </>
   );
 };

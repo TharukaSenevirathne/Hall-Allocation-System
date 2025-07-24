@@ -82,7 +82,6 @@ export default function Login() {
           <label>Password</label>
         </div>
 
-        <span className="login-forgot-password">Forgot Password?</span>
         <button type="submit">Confirm</button>
       </form>
     </div>

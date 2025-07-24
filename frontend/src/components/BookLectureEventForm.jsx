@@ -15,6 +15,9 @@ const BookLectureEventForm = () => {
   });
   const [hallOptions, setHallOptions] = useState([]);
 
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+
   useEffect(() => {
     const fetchHalls = async () => {
       try {
@@ -24,11 +27,22 @@ const BookLectureEventForm = () => {
         setHallOptions(hallNames);
       } catch (err) {
         console.error("❌ Failed to fetch halls:", err);
-        alert("Error fetching hall data");
+        setMessage("Error fetching hall data");
+        setMessageType("error");
       }
     };
     fetchHalls();
   }, []);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +67,8 @@ const BookLectureEventForm = () => {
   const checkAvailability = async (e) => {
     e.preventDefault();
     if (!isValid30MinTime(formData.startTime) || !isValid30MinTime(formData.endTime)) {
-      alert("Please use 30-minute intervals only (e.g., 08:00, 08:30)");
+      setMessage("Please use 30-minute intervals only (e.g., 08:00, 08:30)");
+      setMessageType("error");
       return;
     }
 
@@ -68,7 +83,9 @@ const BookLectureEventForm = () => {
       const newMin = endMinutes % 60;
       const fixedEnd = `${String(newHour).padStart(2, "0")}:${String(newMin).padStart(2, "0")}`;
       setFormData(prev => ({ ...prev, endTime: fixedEnd }));
-      alert(`⚠️ End time was earlier than or same as start. Adjusted to ${fixedEnd}`);
+      setMessage(`⚠️ End time was earlier than or same as start. Adjusted to ${fixedEnd}`);
+      setMessageType("error");
+      return;
     }
 
     try {
@@ -84,15 +101,18 @@ const BookLectureEventForm = () => {
       });
       const data = await res.json();
       if (data.available) {
-        alert("✅ Hall is available!");
+        setMessage("✅ Hall is available!");
+        setMessageType("success");
         setStep(2);
       } else {
-        alert("❌ Hall is not available at that time.");
+        setMessage("❌ Hall is not available at that time.");
+        setMessageType("error");
         console.table(data.clashes);
       }
     } catch (err) {
       console.error("Error checking availability:", err);
-      alert("Failed to check availability");
+      setMessage("Failed to check availability");
+      setMessageType("error");
     }
   };
 
@@ -105,7 +125,8 @@ const BookLectureEventForm = () => {
         body: JSON.stringify({ bookingType, ...formData })
       });
       if (res.ok) {
-        alert("✅ Booking successful");
+        setMessage("✅ Booking successful");
+        setMessageType("success");
         setFormData({
           moduleCode: "",
           eventName: "",
@@ -119,11 +140,13 @@ const BookLectureEventForm = () => {
         setStep(1);
       } else {
         const errorData = await res.json();
-        alert("Booking failed: " + (errorData.message || "Unknown error"));
+        setMessage("Booking failed: " + (errorData.message || "Unknown error"));
+        setMessageType("error");
       }
     } catch (err) {
       console.error("❌ Booking failed:", err);
-      alert("Failed to book event/lecture");
+      setMessage("Failed to book event/lecture");
+      setMessageType("error");
     }
   };
 
@@ -133,6 +156,12 @@ const BookLectureEventForm = () => {
         <h2 className="fm-form-title">Book Lecture / Event</h2>
         <div className="fm-form-icon">📅</div>
       </div>
+
+      {message && (
+        <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+          {message}
+        </div>
+      )}
 
       {step === 1 ? (
         <form onSubmit={checkAvailability} className="fm-multi-step-form">

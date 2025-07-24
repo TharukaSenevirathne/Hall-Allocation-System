@@ -2,7 +2,7 @@
 /* Container */
 .admin-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #ffffff; /* Changed to white */
   padding: 1rem;
 }
 @media (min-width: 768px) {
@@ -233,4 +233,161 @@
     justify-content: flex-start;
     gap: 1.5rem;
   }
+}
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #dc2626;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: transform 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.delete-button:hover {
+  color: white;
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 41, 59, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.modal-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Common button styles */
+.confirm-btn,
+.cancel-btn {
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Confirm button */
+.confirm-btn {
+  background-color: #dc2626;
+  color: white;
+}
+
+.confirm-btn:hover {
+  transform: scale(1.05);
+  animation: gitter 0.3s ease;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.confirm-btn:active {
+  transform: scale(0.96);
+}
+
+/* Cancel button */
+.cancel-btn {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.cancel-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-btn:active {
+  transform: scale(0.96);
+}
+
+/* Gitter (shake) animation */
+@keyframes gitter {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-2px); }
+  50%  { transform: translateX(2px); }
+  75%  { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #088484;
+}
+
+.spinner-logo {
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.3);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.loading-overlay p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #088484;
 }

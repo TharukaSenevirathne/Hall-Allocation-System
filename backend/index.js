@@ -7,6 +7,9 @@ import staffRoute from "./routes/staff.js";
 import bookingsRoute from "./routes/bookings.js";
 import timetableRoute from "./routes/timetable.js";
 import authRoute from "./routes/auth.js";
+import notesRoutes from "./routes/notes.js"; 
+
+
 
 
 
@@ -41,6 +44,8 @@ app.use("/api", staffRoute);
 app.use("/api", bookingsRoute);
 app.use("/api", timetableRoute);
 app.use("/api", authRoute);
+app.use("/api", notesRoutes);
+
 
 
 

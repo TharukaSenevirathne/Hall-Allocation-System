@@ -377,3 +377,59 @@ body {
     order: 2;
   }
 }
+.fm-message {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.fm-message-success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.fm-message-error {
+  background-color: #e74c3c;
+  color: white;
+}
+
+
+.fm-form-textarea {
+  width: 100%;
+  padding: 12px 12px 12px 12px;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  resize: vertical;
+  background: transparent;
+  color: #d1def0;
+  font-family: inherit;
+}
+
+.fm-form-textarea:focus {
+  outline: none;
+  border-bottom-color: #088484;
+}
+
+.fm-form-label {
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 12px;
+  transition: 0.2s ease all;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.fm-form-textarea:focus ~ .fm-form-label,
+.fm-form-textarea:not(:placeholder-shown) ~ .fm-form-label {
+ color: transparent;
+}
+
+.fm-form-group {
+  position: relative;
+  margin-top: 1.5rem;
+}

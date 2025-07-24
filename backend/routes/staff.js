@@ -165,4 +165,21 @@ router.get("/staff", async (req, res) => {
   }
 });
 
+router.delete('/staff/:id', async (req, res) => {
+  const db = req.db;
+  const id = req.params.id;
+
+  try {
+    const [result] = await db.query('DELETE FROM staff WHERE staff_id = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Staff member not found' });
+    }
+    res.json({ message: 'Staff member deleted successfully' });
+  } catch (err) {
+    console.error('❌ Delete error:', err);
+    res.status(500).json({ message: 'Failed to delete staff member' });
+  }
+});
+
+
 export default router;

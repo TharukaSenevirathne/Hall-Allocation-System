@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../styles/Forms.css';
 
 const AddHallForm = () => {
@@ -10,6 +10,9 @@ const AddHallForm = () => {
     projectorAvailability: "",
     nonAcademicMember: ""
   });
+
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +38,8 @@ const AddHallForm = () => {
         })
       });
       if (response.ok) {
-        alert("Hall added successfully!");
+        setMessage("Hall added successfully!");
+        setMessageType("success");
         setFormData({
           hallName: "",
           mainBuilding: "",
@@ -46,13 +50,26 @@ const AddHallForm = () => {
         });
       } else {
         const errorData = await response.json();
-        alert("Error: " + errorData.message);
+        setMessage(`Error: ${errorData.message || "Unable to add hall."}`);
+        setMessageType("error");
       }
     } catch (error) {
       console.error("Error adding hall:", error);
-      alert("Something went wrong!");
+      setMessage("Something went wrong!");
+      setMessageType("error");
     }
   };
+
+  // Auto-hide message after 5 seconds
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   return (
     <div className="fm-form-card">
@@ -61,6 +78,12 @@ const AddHallForm = () => {
         <div className="fm-form-icon">🏢</div>
       </div>
       <form onSubmit={handleSubmit}>
+        {message && (
+          <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+            {message}
+          </div>
+        )}
+
         <div className="fm-form-group">
           <input type="text" name="hallName" value={formData.hallName} onChange={handleChange} className="fm-form-input" placeholder=" " required />
           <label className="fm-form-label">Hall Name</label>
@@ -70,7 +93,7 @@ const AddHallForm = () => {
           <select name="mainBuilding" value={formData.mainBuilding} onChange={handleChange} className="fm-form-select" required>
             <option value="">Select Main Building</option>
             <option value="Admin">Admin</option>
-            <option value="Mew Lecture Hall Building">New Lecture Hall Building</option>
+            <option value="New Lecture Hall Building">New Lecture Hall Building</option>
             <option value="Old Lecture Hall Building">Old Lecture Hall Building</option>
             <option value="DEIE Building">DEIE Building</option>
             <option value="MME Building">MME Building</option>

@@ -147,5 +147,55 @@ router.get("/students/:id", async (req, res) => {
   }
 });
 
+// GET /students?type=student  (or just GET /students to fetch all students)
+// If you want, restrict only to 'student' type for safety here.
+router.get("/students", async (req, res) => {
+  const pool = req.db;
+  const userType = req.query.type || 'Student'; // default to Student if not specified
+
+  if (userType.toLowerCase() !== 'student') {
+    return res.status(400).json({ error: "This endpoint only supports type=Student" });
+  }
+
+  try {
+    const conn = await pool.getConnection();
+    const [rows] = await conn.query(
+      `SELECT user_id, reg_no, name, email, contact_no, department, batch 
+       FROM Users 
+       WHERE user_type = ?`,
+      [userType]
+    );
+    conn.release();
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Error fetching students:", err);
+    res.status(500).json({ error: "Failed to fetch students" });
+  }
+});
+
+// DELETE /students/:id  - Delete a student by user_id
+router.delete("/students/:id", async (req, res) => {
+  const pool = req.db;
+  const studentId = req.params.id;
+
+  try {
+    const conn = await pool.getConnection();
+    const [result] = await conn.query(
+      "DELETE FROM Users WHERE user_id = ? AND user_type = 'Student'",
+      [studentId]
+    );
+    conn.release();
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Student not found or already deleted" });
+    }
+
+    res.json({ message: "Student deleted successfully" });
+  } catch (err) {
+    console.error("❌ Error deleting student:", err);
+    res.status(500).json({ error: "Failed to delete student" });
+  }
+});
 
 export default router;

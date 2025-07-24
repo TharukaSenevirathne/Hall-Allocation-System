@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const UpdateStaffForm = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [formData, setFormData] = useState(null);
   const [selectedStaffId, setSelectedStaffId] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // success | error
+
+  useEffect(() => {
+    if (message) {
+      const timeout = setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [message]);
 
   const handleSearch = async () => {
     try {
@@ -13,10 +25,12 @@ const UpdateStaffForm = () => {
       setSearchResults(data);
     } catch (err) {
       console.error("Search error:", err);
+      setMessage("❌ Search failed.");
+      setMessageType("error");
     }
   };
 
-  const handleSelect = async (staff) => {
+  const handleSelect = (staff) => {
     setSelectedStaffId(staff.staff_id);
     setFormData({
       name: staff.name,
@@ -38,9 +52,7 @@ const UpdateStaffForm = () => {
       const raw = value.toUpperCase().replace(/,/g, "");
       let result = "";
       for (let i = 0; i < raw.length; i++) {
-        if (i > 0 && i % 6 === 0) {
-          result += ",";
-        }
+        if (i > 0 && i % 6 === 0) result += ",";
         result += raw[i];
       }
       setFormData((prev) => ({ ...prev, [name]: result }));
@@ -57,16 +69,21 @@ const UpdateStaffForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
+
       const data = await res.json();
       if (res.ok) {
-        alert("Staff updated successfully!");
+        setMessage("✅ Staff updated successfully!");
+        setMessageType("success");
         setFormData(null);
         setSelectedStaffId(null);
       } else {
-        alert("Error: " + (data.error || "Failed to update"));
+        setMessage("❌ " + (data.error || "Failed to update"));
+        setMessageType("error");
       }
     } catch (err) {
       console.error("Update error:", err);
+      setMessage("❌ Something went wrong!");
+      setMessageType("error");
     }
   };
 
@@ -76,6 +93,12 @@ const UpdateStaffForm = () => {
         <h2 className="fm-form-title">Update Staff Member</h2>
         <div className="fm-form-icon">👨‍🏫</div>
       </div>
+
+      {message && (
+        <div className={`fm-message ${messageType === "success" ? "fm-message-success" : "fm-message-error"}`}>
+          {message}
+        </div>
+      )}
 
       <div className="fm-form-group fm-search-group">
         <input
